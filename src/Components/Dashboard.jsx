@@ -1,20 +1,24 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import image from "../assets/images/about.jpg";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
 
-  // Base API URL (local or deployed)
+  // Base API URL
   const API_BASE_URL =
     import.meta.env.MODE === "development"
       ? import.meta.env.VITE_API_BASE_URL_LOCAL
       : import.meta.env.VITE_API_BASE_URL_DEPLOY;
 
-  // Fetch appointments from Django API
+  // Optional: include JWT token if backend requires authentication
+  const token = localStorage.getItem("token"); // Make sure you set token after login
+  const axiosConfig = token
+    ? { headers: { Authorization: `Bearer ${token}` } }
+    : {};
+
   const fetchAppointments = async () => {
     try {
-      const res = await axios.get(`${API_BASE_URL}api/appointments/`);
+      const res = await axios.get(`${API_BASE_URL}/api/appointments/`, axiosConfig);
       setAppointments(res.data);
     } catch (err) {
       console.error("Error fetching appointments:", err.response?.data || err.message);
@@ -24,8 +28,8 @@ const Dashboard = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Are you sure you want to delete this appointment?")) {
       try {
-        await axios.delete(`${API_BASE_URL}api/appointments/${id}/`);
-        setAppointments(appointments.filter((appt) => appt.id !== id)); // Update UI
+        await axios.delete(`${API_BASE_URL}/api/appointments/${id}/`, axiosConfig);
+        setAppointments(appointments.filter((appt) => appt.id !== id));
         alert("Appointment deleted successfully!");
       } catch (err) {
         console.error("Error deleting appointment:", err.response?.data || err.message);
@@ -40,9 +44,8 @@ const Dashboard = () => {
 
   return (
     <div className="container-fluid">
-      <div className="row">
-        {/* Appointments Section */}
-        <div className="col-md-8 text-center">
+      <div className="row justify-content-center">
+        <div className="col-md-10 text-center">
           <h2 className="p-5">APPOINTMENTS</h2>
           <table className="table table-bordered table-striped table-hover">
             <thead className="table-dark">
@@ -59,8 +62,8 @@ const Dashboard = () => {
             </thead>
             <tbody>
               {appointments.length > 0 ? (
-                appointments.map((appt, index) => (
-                  <tr key={index}>
+                appointments.map((appt) => (
+                  <tr key={appt.id}>
                     <td>{appt.full_name}</td>
                     <td>{appt.email}</td>
                     <td>{appt.phone_number}</td>
