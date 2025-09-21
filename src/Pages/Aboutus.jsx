@@ -1,13 +1,13 @@
 import React from 'react'
 import About from '../Components/About'
-import Whyus from '../Components/whyus'
+import WhyUs from '../Components/WhyUs'
 
 const Aboutus = () => {
   return (
     <div>
       <section>
         <About />
-        <Whyus />
+        <WhyUs />
       </section>
     </div>
   )
