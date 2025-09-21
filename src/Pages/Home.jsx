@@ -3,7 +3,7 @@ import Hero from '../Components/Hero'
 import Feature from '../Components/Feature'
 import About from '../Components/About'
 import Departments from '../Components/Departments'
-import WhyUs from '../Components/WhyUs'   //  FIXED HERE
+import WhyUs from '../Components/Whyus'   //  FIXED HERE
 import Counter from '../Components/Counter'
 import Team from '../Components/Team'
 import ContactForm from '../Components/ContactForm'

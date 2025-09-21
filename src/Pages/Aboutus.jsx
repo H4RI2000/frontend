@@ -1,6 +1,6 @@
 import React from 'react'
 import About from '../Components/About'
-import WhyUs from '../Components/WhyUs'
+import WhyUs from '../Components/Whyus'
 
 const Aboutus = () => {
   return (
