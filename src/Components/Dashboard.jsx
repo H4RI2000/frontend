@@ -3,38 +3,56 @@ import axios from "axios";
 
 const Dashboard = () => {
   const [appointments, setAppointments] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-  // Base API URL
+  // Base API URL (local or deployed)
   const API_BASE_URL =
     import.meta.env.MODE === "development"
       ? import.meta.env.VITE_API_BASE_URL_LOCAL
       : import.meta.env.VITE_API_BASE_URL_DEPLOY;
 
-  // Optional: include JWT token if backend requires authentication
-  const token = localStorage.getItem("token"); // Make sure you set token after login
-  const axiosConfig = token
-    ? { headers: { Authorization: `Bearer ${token}` } }
-    : {};
-
+  // Fetch appointments from Django API
   const fetchAppointments = async () => {
+    setLoading(true);
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/appointments/`, axiosConfig);
+      const token = localStorage.getItem("token");
+      const res = await axios.get(`${API_BASE_URL}/api/appointments/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setAppointments(res.data);
     } catch (err) {
-      console.error("Error fetching appointments:", err.response?.data || err.message);
+      console.error(
+        "Error fetching appointments:",
+        err.response?.data || err.message
+      );
+      setAppointments([]);
+    } finally {
+      setLoading(false);
     }
   };
 
+  // Delete appointment
   const handleDelete = async (id) => {
-    if (window.confirm("Are you sure you want to delete this appointment?")) {
-      try {
-        await axios.delete(`${API_BASE_URL}/api/appointments/${id}/`, axiosConfig);
-        setAppointments(appointments.filter((appt) => appt.id !== id));
-        alert("Appointment deleted successfully!");
-      } catch (err) {
-        console.error("Error deleting appointment:", err.response?.data || err.message);
-        alert("Failed to delete appointment.");
-      }
+    if (!window.confirm("Are you sure you want to delete this appointment?"))
+      return;
+
+    try {
+      const token = localStorage.getItem("token");
+      await axios.delete(`${API_BASE_URL}/api/appointments/${id}/`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      setAppointments(appointments.filter((appt) => appt.id !== id));
+      alert("Appointment deleted successfully!");
+    } catch (err) {
+      console.error(
+        "Error deleting appointment:",
+        err.response?.data || err.message
+      );
+      alert("Failed to delete appointment.");
     }
   };
 
@@ -42,27 +60,32 @@ const Dashboard = () => {
     fetchAppointments();
   }, []);
 
+  if (loading) return <p className="text-center mt-5">Loading appointments...</p>;
+
   return (
     <div className="container-fluid">
-      <div className="row justify-content-center">
-        <div className="col-md-10 text-center">
-          <h2 className="p-5">APPOINTMENTS</h2>
-          <table className="table table-bordered table-striped table-hover">
-            <thead className="table-dark">
-              <tr>
-                <th>Patient Name</th>
-                <th>Email</th>
-                <th>Phone</th>
-                <th>Department</th>
-                <th>Date</th>
-                <th>Time</th>
-                <th>Additional Requirement</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {appointments.length > 0 ? (
-                appointments.map((appt) => (
+      <div className="row">
+        <div className="col-md-10 offset-md-1">
+          <h2 className="text-center my-4">Appointments</h2>
+
+          {appointments.length === 0 ? (
+            <p className="text-center">No appointments found.</p>
+          ) : (
+            <table className="table table-bordered table-striped table-hover">
+              <thead className="table-dark">
+                <tr>
+                  <th>Patient Name</th>
+                  <th>Email</th>
+                  <th>Phone</th>
+                  <th>Department</th>
+                  <th>Date</th>
+                  <th>Time</th>
+                  <th>Additional Requirement</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {appointments.map((appt) => (
                   <tr key={appt.id}>
                     <td>{appt.full_name}</td>
                     <td>{appt.email}</td>
@@ -80,14 +103,10 @@ const Dashboard = () => {
                       </button>
                     </td>
                   </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="8">No appointments found</td>
-                </tr>
-              )}
-            </tbody>
-          </table>
+                ))}
+              </tbody>
+            </table>
+          )}
         </div>
       </div>
     </div>
