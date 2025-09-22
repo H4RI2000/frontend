@@ -26,15 +26,9 @@ const DoctorRegister = () => {
       return;
     }
 
-    // Use environment variables for API URL
-    const API_BASE_URL =
-      import.meta.env.MODE === "development"
-        ? import.meta.env.VITE_API_BASE_URL_LOCAL
-        : import.meta.env.VITE_API_BASE_URL_DEPLOY;
-
     try {
       const response = await axios.post(
-        `https://backend-cs8c.onrender.com/api/register-doctor/`,
+        'https://backend-cs8c.onrender.com/api/register-doctor/',
         formData
       );
       alert("Doctor registered successfully!");

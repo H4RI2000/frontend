@@ -22,15 +22,9 @@ function Appointment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-        // Choose API URL based on environment
-    const API_BASE_URL =
-      import.meta.env.MODE === "development"
-        ? import.meta.env.VITE_API_BASE_URL_LOCAL
-        : import.meta.env.VITE_API_BASE_URL_DEPLOY;
-
     try {
      const response = await axios.post(
-        `https://backend-cs8c.onrender.com/api/appointments/`,
+        'https://backend-cs8c.onrender.com/api/appointments/',
         formData
       );
       alert("Appointment booked successfully!");
