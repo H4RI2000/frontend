@@ -34,27 +34,28 @@ const Dashboard = () => {
   };
 
   // Delete appointment
-  const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this appointment?"))
-      return;
+ const handleDelete = async (id) => {
+  if (!window.confirm("Are you sure you want to delete this appointment?"))
+    return;
 
-    try {
-      const token = localStorage.getItem("token");
-      await axios.delete('https://backend-cs8c.onrender.com/api/appointments/${id}/', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      setAppointments(appointments.filter((appt) => appt.id !== id));
-      alert("Appointment deleted successfully!");
-    } catch (err) {
-      console.error(
-        "Error deleting appointment:",
-        err.response?.data || err.message
-      );
-      alert("Failed to delete appointment.");
-    }
+   try {
+    const token = localStorage.getItem("token");
+    await axios.delete(`https://backend-cs8c.onrender.com/api/appointments/${id}/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    setAppointments(appointments.filter((appt) => appt.id !== id));
+    alert("Appointment deleted successfully!");
+   } catch (err) {
+     console.error(
+      "Error deleting appointment:",
+      err.response?.data || err.message
+     );
+     alert("Failed to delete appointment.");
+   }
   };
+
 
   useEffect(() => {
     fetchAppointments();
