@@ -40,7 +40,7 @@ const Dashboard = () => {
 
     try {
       const token = localStorage.getItem("token");
-      await axios.delete(`https://backend-cs8c.onrender.com//api/appointments/${id}/`, {
+      await axios.delete('https://backend-cs8c.onrender.com/api/appointments/${id}/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
