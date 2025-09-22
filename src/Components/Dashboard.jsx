@@ -16,7 +16,7 @@ const Dashboard = () => {
     setLoading(true);
     try {
       const token = localStorage.getItem("token");
-      const res = await axios.get(`${API_BASE_URL}/api/appointments/`, {
+      const res = await axios.get('https://backend-cs8c.onrender.com/api/appointments/', {
         headers: {
           Authorization: `Bearer ${token}`,
         },
