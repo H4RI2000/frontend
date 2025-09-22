@@ -34,7 +34,7 @@ const DoctorRegister = () => {
 
     try {
       const response = await axios.post(
-        `${API_BASE_URL}api/register-doctor/`,
+        `https://backend-cs8c.onrender.com/api/register-doctor/`,
         formData
       );
       alert("Doctor registered successfully!");

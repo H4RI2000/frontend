@@ -30,7 +30,7 @@ function Appointment() {
 
     try {
      const response = await axios.post(
-        `${API_BASE_URL}/api/appointments/`,
+        `https://backend-cs8c.onrender.com/api/appointments/`,
         formData
       );
       alert("Appointment booked successfully!");

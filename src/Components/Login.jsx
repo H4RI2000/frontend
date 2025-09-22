@@ -21,7 +21,7 @@ const Login = () => {
         : import.meta.env.VITE_API_BASE_URL_DEPLOY;
 
     try {
-      const res = await axios.post(`${API_BASE_URL}api/login-doctor/`, {
+      const res = await axios.post(`https://backend-cs8c.onrender.com/api/login-doctor/`, {
         username: formData.email, // Django expects "username"
         password: formData.password,
       });
